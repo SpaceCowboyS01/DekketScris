@@ -51,15 +51,15 @@ void encrypt(File image, File text, File out) {
             byte x = 0x01;
             for (int j = 0; j < 8; ++j) {
                 byte img_byte = image.read();
-                if ((j + 1) % 4 != 0) {
-                    // to_write = ((img_byte >> 1) << 1) | (text_byte & x) >> j;
-                    to_write = (img_byte & 0xFE) | (text_byte & x) >> j;
-                    x <<= 1;
-                } else {
-                    to_write = img_byte;
-                }
+                // to_write = ((img_byte >> 1) << 1) | (text_byte & x) >> j;
+                to_write = (img_byte & 0xFE) | (text_byte & x) >> j;
+                x <<= 1;
                 out.write(to_write);
+                if ((j + 1) % 4 == 0) { //(i + 1) % 3 ??
+                    out.write(image.read());
+                }
             }
+            out.write(image.read());
         } else {
             out.write(image.read());
         }
