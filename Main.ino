@@ -13,7 +13,7 @@
 #define SERIAL_FREQUENCY 9600
 #define ENCRYPT_DECRYPT_PIN 13
 #define PROCESS_COMPLETE_PIN 12
-#define ERROR_PIN 11
+#define ERROR_PIN 8
 
 typedef char byte;
 
@@ -67,7 +67,7 @@ void encrypt(File image, File text, File out) {
 }
 
 void decrypt(File image, File text) {
-    //TODO Finish implement
+    //TODO Finish implementation
     image.seek(10);
     int offset = 0;
     offset += image.read() << 24;
@@ -76,7 +76,23 @@ void decrypt(File image, File text) {
     offset += image.read();
 
     image.seek(offset); //offset - 1 ??
+    while (image.available()) {
+        byte text_byte = 0;
 
+        for (int i = 0; i < 8; ++i) {
+            byte img_byte = image.read();
+            if ((i + 1) % 4 != 0) { //(i + 1) % 3 ??
+                text_byte += (img_byte | 0x01) << i; //&= instead of += ??
+
+                //text_byte &= (img_byte | 0xFE)
+
+                /*
+                 * text_byte += (img_byte | 0x01);
+                 * text_byte << 1;
+                 */
+            }
+        }
+    }
 }
 
 void complete() {
