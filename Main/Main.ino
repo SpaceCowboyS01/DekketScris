@@ -25,39 +25,37 @@ void encrypt(File image, File text, File out) {
     image.seek(10);
     int offset = 0;
     image.read(&offset, sizeof(offset));
-
-    int image_length = image.size() - offset;
     
     image.seek(0);
     for (int j = 0; j < offset; ++j) {
-        byte x;
-        image.read(&x, sizeof(byte));
+        char x;
+        image.read(&x, sizeof(char));
         out.write(x);
-        delay(1);
     }
 
+    image.seek(offset);
     while (image.available()) {
         setRgb(image.size(), image.position());
         if (text.available()) {
-            byte text_byte = text.read();
-            byte to_write;
+            char text_byte = text.read();
 
-            byte x = 0x01;
-            for (int j = 0; j < 8; ++j) {
-                byte img_byte = image.read();
-                to_write = (img_byte & 0xFE) | (text_byte & x) >> j;
+            char x = 0x01;
+            for (int i = 0; i < 8; ++i) {
+                char img_byte;
+                image.read(&img_byte, sizeof(char));
+                char to_write = ((img_byte & 0xFE) | ((text_byte & x) >> i));
                 x <<= 1;
                 out.write(to_write);
                 
-                if ((j + 1) % 3 == 0) {
-                    byte x = image.read();
+                if ((i + 1) % 3 == 0) {
+                    char x = image.read();
                     out.write(x);
                 }
             }
-            byte y = image.read();
+            char y = image.read();
             out.write(y);
         } else {
-            byte x = image.read();
+            char x = image.read();
             x &= 0xFE;
             out.write(x);
         }
@@ -71,19 +69,19 @@ void decrypt(File image, File text) {
 
     image.seek(offset);
     while (image.available()) {
-        byte text_byte = 0;
-
+        char text_byte = 0;
+        char img_byte;
         for (int i = 0; i < 8; ++i) {
-            byte img_byte;
-            image.read(&img_byte, sizeof(byte));
-            text_byte |= (img_byte & 0x01) << i;
+            image.read(&img_byte, sizeof(char));
+            text_byte = text_byte | ((img_byte & 0x01) << i);
             
-            if ((i + 1) % 3 != 0) {
+            if ((i + 1) % 3 == 0) {
                 image.read();
             }
         }
+        image.read();
         text.write(text_byte);
-        
+
         if (text_byte == 0) {
             break;
         }
@@ -91,39 +89,30 @@ void decrypt(File image, File text) {
 }
 
 void setRgb(int file_size, int current_position) {
-    int x = (current_position * 255 * 2) / file_size;
-    if (x < 255) {
-        RGB_color(x, 0, 0);
-    } else {
-        RGB_color(255, x % 255, 0);
-    }
+    double x = ((double) current_position / (double) file_size) * 255.0 * 2.0;
+    RGB_color(0, x >= 255 ? x - 255 : 0, 255 - abs(x - 255));
 }
 
 void complete() {
-    RGB_color(0, 255, 0);
-    stop();
-    RGB_color(0, 0, 0);
-}
-
-void stop() {
-    while (completed) {
-        delay(1000);
-    }
+    stop(0, 255, 0);
 }
 
 void error() {
     completed = true;
-    RGB_color(255, 0, 0);
-    stop();
-    RGB_color(0, 0, 0);
+    stop(255, 0, 0);
 }
 
-void changeComplete() {
-    completed = false;
-}
+void stop(int red_light_value, int green_light_value, int blue_light_value) {
+    while (completed) {
+        RGB_color(0, 0, 0);
+        delay(1000);
+        RGB_color(red_light_value, green_light_value, blue_light_value);
+        delay(1000);
 
-void encryptDecrypt() {
-    encrypting = !encrypting;
+        if (digitalRead(INTERRUPT_PIN) == HIGH) {
+            completed = false;
+        }
+    }
 }
 
 void RGB_color(int red_light_value, int green_light_value, int blue_light_value) {
@@ -140,27 +129,25 @@ void setup() {
     pinMode(ENCRYPT_DECRYPT_PIN, INPUT);
     pinMode(INTERRUPT_PIN, INPUT);
     RGB_color(0, 0, 0);
-
-    attachInterrupt(digitalPinToInterrupt(INTERRUPT_PIN), changeComplete, RISING);
-    //attachInterrupt(digitalPinToInterrupt(ENCRYPT_DECRYPT_PIN), encryptDecrypt, RISING);
 }
 
 void loop() {
     if (!SD.begin(CS_PIN)) {
-        RGB_color(255, 0, 0);
+        RGB_color(0, 0, 255);
         delay(1000);
         return;
     }
     RGB_color(0, 0, 0);
 
     //ENCRYPT
-    if (digitalRead(ENCRYPT_DECRYPT_PIN) == HIGH) {
-        immagine = SD.open("image.bmp", FILE_READ);
-        testo = SD.open("text.txt", FILE_READ);
-        output = SD.open("output.bmp", FILE_WRITE);
+    if (digitalRead(ENCRYPT_DECRYPT_PIN) == HIGH/* && SD.exists("INPUT.BMP") && SD.exists("TEXT.TXT")*/) {
+        immagine = SD.open("INPUT.BMP", FILE_READ);
+        testo = SD.open("TEXT.TXT", FILE_READ);
+        output = SD.open("OUTPUT.BMP", FILE_WRITE);
 
-        if (!immagine || !testo) {
+        if (!immagine || !testo || !output) {
             error();
+            return;
         }
         encrypt(immagine, testo, output);
 
@@ -168,23 +155,24 @@ void loop() {
         testo.close();
         output.close();
 
-        //SD.remove("image.bmp");
-        //SD.remove("text.txt");
+        //SD.remove("INPUT.BMP");
+        //SD.remove("TEXT.TXT");
         completed = true;
     }
     //DECRYPT
-    else {
-        immagine = SD.open("output.bmp", FILE_READ);
-        testo = SD.open("text.txt", FILE_WRITE);
-        if (!immagine) {
+    else/* if (digitalRead(ENCRYPT_DECRYPT_PIN) == LOW && SD.exists("OUTPUT.BMP")) */{
+        immagine = SD.open("OUTPUT.BMP", FILE_READ);
+        testo = SD.open("OUTPUT.TXT", FILE_WRITE);
+        if (!immagine || !testo) {
             error();
+            return;
         }
         decrypt(immagine, testo);
 
         immagine.close();
         testo.close();
 
-        //SD.remove("output.bmp");
+        //SD.remove("OUTPUT.BMP");
         completed = true;
     }
     complete();
