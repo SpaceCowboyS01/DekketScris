@@ -32,10 +32,12 @@ void encrypt(File image, File text, File out) {
     "movw	r24, r28 \n"
     "adiw	r24, 0x1c \n"
     "call	0x1b94 \n");
+    
     int offset = 0;
     asm(
     "std	Y+56, r1 \n"
     "std	Y+55, r1 \n");
+    
     image.read(&offset, sizeof(offset));
     asm(
     "ldi	r20, 0x02 \n"
@@ -58,8 +60,11 @@ void encrypt(File image, File text, File out) {
     "movw	r24, r28 \n"
     "adiw	r24, 0x1c \n"
     "call	0x1b94 \n");
+    
     char img_byte;
+    
     char text_byte = 0;
+    
     for (int i = 0; i < 8; ++i) {
         image.read(&img_byte, sizeof(char));
         text_byte = text_byte | ((img_byte & 0x01) << i);
@@ -69,11 +74,15 @@ void encrypt(File image, File text, File out) {
             "ldi	r24, 0x03 \n"
             "mov	r8, r24 \n"
             "mov	r9, r1 \n");
+            
             image.seek(10);
+            
             int offset = 0;
+            
             image.read(&offset, sizeof(offset));
 
             image.seek(offset);
+            
             while (image.available()) {
                 asm(
                 "movw	r24, r28 \n"
@@ -90,24 +99,31 @@ void encrypt(File image, File text, File out) {
             "ldi	r24, 0x98 \n"
             "ldi	r25, 0x04 \n"
             "call	0x2298 \n");
+            
             testo.close();
             asm(
             "ldi	r24, 0x7D \n"
             "ldi	r25, 0x04 \n"
             "rjmp	.-216 \n");
+            
             offset = 0;
+            
             image.read(&offset, sizeof(offset));
 
             image.seek(offset);
+            
             while (image.available()) {
                 setRgb(image.size(), image.position());
                 text_byte = 0;
                 asm("mov	r15, r1 \n");
+                
                 char img_byte;
+                
                 for (int i = 0; i < 8; ++i) {
                     asm(
                     "ldi	r17, 0x00 \n"
                     "ldi	r16, 0x00 \n");
+                    
                     image.read(&img_byte, sizeof(char));
                     asm(
                     "ldi	r20, 0x01 \n"
@@ -118,6 +134,7 @@ void encrypt(File image, File text, File out) {
                     "movw	r24, r28 \n"
                     "adiw	r24, 0x1c \n"
                     "call	0x1c00 \n");
+                    
                     text_byte = text_byte | ((img_byte & 0x01) << i);
                     asm(
                     "adiw	r28, 0x13 \n"
@@ -144,6 +161,7 @@ void encrypt(File image, File text, File out) {
                         "call	0x337a \n"
                         "or	r24, r25 \n"
                         "brne	.+8 \n");
+                        
                         image.read();
                         asm(
                         "movw	r24, r28 \n"
@@ -151,9 +169,13 @@ void encrypt(File image, File text, File out) {
                         "call	0x1cc8 \n");
 
                         image.seek(offset);
+                        
                         while (image.available()) {
+                            
                             char text_byte = 0;
+                            
                             char img_byte;
+                            
                             for (int i = 0; i < 8; ++i) {
                                 asm(
                                 "cpi	r16, 0x08 \n"
@@ -164,11 +186,13 @@ void encrypt(File image, File text, File out) {
                                     image.read();
                                 }
                             }
+                            
                             image.read();
                             asm(
                             "movw	r24, r28 \n"
                             "adiw	r24, 0x1c \n"
                             "call	0x1cc8 \n");
+                            
                             text.write(text_byte);
                             asm(
                             "mov	r22, r15 \n"
