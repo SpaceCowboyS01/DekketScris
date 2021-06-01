@@ -218,26 +218,44 @@ void decrypt(File image, File text) {
     image.seek(10);
     int offset = 0;
     image.read(&offset, sizeof(offset));
+void unveiling(File image, File text) {
+image.seek(10);
+int offset = 0;
+image.read(&offset, sizeof(offset));
 
-    image.seek(offset);
-    while (image.available()) {
-        char text_byte = 0;
-        char img_byte;
-        for (int i = 0; i < 8; ++i) {
-            image.read(&img_byte, sizeof(char));
-            text_byte = text_byte | ((img_byte & 0x01) << i);
-            
-            if ((i + 1) % 3 == 0) {
-                image.read();
-            }
-        }
-        image.read();
-        text.write(text_byte);
-
-        if (text_byte == 0) {
-            break;
+image.seek(offset);
+while (image.available()) {
+    setRgb(image.size(), image.position());
+    
+    
+    
+    for ( i = 0; i < 8; ++i) {
+        image.read(&img_byte, sizeof(char));
+        //text_byte = text_byte | ((img_byte & 0x01) << i);
+    asm(
+    "lds r24, (img_byte) \n"
+    "lds r26, (text_byte) \n"
+    "and r24, 0x01 \n"
+    "lds r25, (i) \n"
+    "loop:"
+    "lsl r24 \n"
+    "dec r25 \n"
+    "brne loop \n"
+    "or r26, r24 \n"
+    :::"r24", "r26", "r25"
+    );
+        
+        if ((i + 1) % 3 == 0) {
+            image.read();
         }
     }
+    image.read();
+    text.write(text_byte);
+
+    if (text_byte == 0) {
+        break;
+    }
+}
 }
 
 void setRgb(int file_size, int current_position) {
