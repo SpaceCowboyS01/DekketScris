@@ -72,8 +72,6 @@ image.seek(offset);
 while (image.available()) {
     setRgb(image.size(), image.position());
     
-    
-    
     for ( i = 0; i < 8; ++i) {
         image.read(&img_byte, sizeof(char));
         //text_byte = text_byte | ((img_byte & 0x01) << i);
@@ -104,8 +102,13 @@ while (image.available()) {
 }
 
 void setRgb(unsigned long file_size, unsigned long current_position) {
-double x = ((double) current_position / (double) file_size) * 255.0 * 2.0;
-RGB_color(0, (x >= 255 ? x - 255 : 0), 255 - x);
+    double x = ((double) current_position / (double) file_size) * 255.0 * 2.0;
+    if (x <= 255) {
+        RGB_color(0, x, 255);
+    } else {
+        RGB_color(0, 255, (255 * 2) - x);
+    }
+    //RGB_color(0, (x >= 255 ? x - 255 : 0), 255 - x);
 }
 
 void complete() {
