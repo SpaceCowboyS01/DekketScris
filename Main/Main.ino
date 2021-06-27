@@ -42,10 +42,34 @@ while (image.available()) {
         char to_write;
             to_write = ((img_byte & 0xFE) | ((text_byte & x) >> i));
             x <<= 1;
-      /*asm(
-      //encrytp TO DO
-      :::
-      );*/
+                asm(
+                "lds r24, (img_byte) \n"
+
+                            "lds r26, (text_byte) \n"
+
+                            "and r24, 0xFE \n"
+
+                            "and r24, 0x01 \n"
+
+                            "lds r25, (i) \n"
+
+                            "loop:"
+
+                            "lsr r26"
+
+                            "dec r25 \n"
+
+                            "brne loop \n"
+
+                            "or r24, r26 \n"
+
+                            "lds r28, (to_write) \n"
+
+                            "mov r28, r24 \n"
+
+                            :: :"r26", "r24", "r25", "r26"
+                     );
+            x <<= 1;`
             out.write(to_write);
             
             if ((i + 1) % 3 == 0) {
