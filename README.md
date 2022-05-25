@@ -1,7 +1,7 @@
 # DekketScris
 "Architecture of Computers" project 2020/2021
 
-[Computer Science] (https://computerscience.unicam.it/) - [University of Camerino](https://www.unicam.it/) (Unicam).
+[Computer Science](https://computerscience.unicam.it/) - [University of Camerino](https://www.unicam.it/) (Unicam).
 
 Group project "DekketScris"
 
