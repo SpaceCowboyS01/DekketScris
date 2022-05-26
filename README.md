@@ -5,12 +5,12 @@
 
 Group project "DekketScris"
 
-* Simone Cisca, as, SpaceCowboyS01
-* Patryk Sebastian Bialowas, as, MrError-404
-* Federico Maria Cruciani, as, Fede-2001
-* Leonardo Salpini, as, Synthetize
-* Dumitru Burdimov, as, r0n3-x
-* Maurizio Calvari, as, moorijio
+* Simone Cisca, as, [@SpaceCowboyS01](https://github.com/SpaceCowboyS01)
+* Patryk Sebastian Bialowas, as, [@MrError-404](https://github.com/MrError-404)
+* Federico Maria Cruciani, as, [@Fede-2001](https://github.com/Fede-2001)
+* Leonardo Salpini, as, [@Synthetize](https://github.com/Synthetize)
+* Dumitru Burdimov, as, [@r0n3-x](https://github.com/r0n3-x)
+* Maurizio Calvari, as, [@moorijio](https://github.com/moorijio)
 
 Using an Arduino Uno R3 ATMEGA328P as a steganograph.
 The project involves writing the software code and building the circuit.
