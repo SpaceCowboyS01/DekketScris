@@ -1,5 +1,5 @@
 # DekketScris
-"Architecture of Computers" project 2020/2021
+"Architettura degli Elaboratori" - Professor Massimo Trojani - project 2020/2021
 
 [Computer Science](https://computerscience.unicam.it/) - University of Camerino [Unicam](https://www.unicam.it/).
 
