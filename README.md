@@ -1,5 +1,7 @@
 # DekketScris
-"Architettura degli Elaboratori" - _Professor Massimo Trojani_ - project 2020/2021
+"Architettura degli Elaboratori" - _Professor Massimo Trojani_
+
+ST1213 - project 2020/2021
 
 [Computer Science](https://computerscience.unicam.it/) - University of Camerino [Unicam](https://www.unicam.it/).
 
