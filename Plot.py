@@ -18,9 +18,9 @@ def main():
     pyplot.show()
 
     pyplot.figure(2)
-    tempoAssembly = [18, 87, 160, 229, 305, 373, 552, 622, 701, 776, 864]
-    tempoC = [23, 108, 197, 285, 376, 464, 687, 774, 868, 954, 1051]
-    dimensione_file = [1, 11, 21, 31, 41, 51, 61, 71, 81, 91, 101]
+    tempoAssembly = [0, 18, 87, 160, 229, 305, 373, 552, 622, 701, 776, 864]
+    tempoC = [0, 23, 108, 197, 285, 376, 464, 687, 774, 868, 954, 1051]
+    dimensione_file = [0, 1, 11, 21, 31, 41, 51, 61, 71, 81, 91, 101]
 
     x = [i*10 for i in range(max(dimensione_file)+1)]
     y = [i for i in range(max(dimensione_file)+1)]
