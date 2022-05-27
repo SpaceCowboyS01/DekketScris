@@ -1,5 +1,5 @@
 # DekketScris
-"Architettura degli Elaboratori" - _Professor Massimo Trojani_
+"Architettura degli Elaboratori" - _Professor Massimo Trojani_ [link](https://computerscience.unicam.it/massimo-trojani)
 
 ST1213 - project 2020/2021
 
@@ -21,7 +21,7 @@ The steganograph will be powered via PowerBank or other power supply via the USB
 
 How to use it:
 
-In an SD card, put input.txt and input.bmp in order to perform the "hiding" function.
+In an SD card, put input.txt and input.bmp to perform the "hiding" function.
 
 Enter only input.bmp to perform the "unveilnig" function.
 
