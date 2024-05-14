@@ -4,7 +4,7 @@
 
 "Architettura degli Elaboratori" - _Professor Massimo Trojani_ [link](https://computerscience.unicam.it/massimo-trojani)
 
-##Group project "DekketScris"
+## Group project "DekketScris"
 
 - Simone Cisca, alias, [@SpaceCowboySCX](https://github.com/SpaceCowboySCX)
 - Patryk Sebastian Bialowas, alias, [@MrError-404](https://github.com/MrError-404)
@@ -13,7 +13,7 @@
 - Dumitru Burdimov, alias, [@r0n3-x](https://github.com/r0n3-x)
 - Maurizio Calvari, alias, [@moorijio](https://github.com/moorijio)
 
-##ST1213 - project 2020/2021
+## ST1213 - project 2020/2021
 
 Using an Arduino Uno R3 ATMEGA328P as a steganograph. The project involves writing the software code and building the circuit.
 
@@ -28,4 +28,4 @@ Read the document for more details.
 
 !! Attention this document is only available in Italian. !!
 
-[SteganografoArduinoAE.pdf]()
+[SteganografoArduinoAE.pdf](steganografo.pdf)
