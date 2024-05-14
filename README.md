@@ -28,4 +28,4 @@ Read the document for more details.
 
 !! Attention this document is only available in Italian. !!
 
-[SteganografoArduinoAE.pdf](steganografo.pdf)
+[SteganografoArduinoAE.pdf](Steganografo.pdf)
